@@ -33,6 +33,8 @@ export const handler: Handler = async (
     callback: Callback,
 ) => {
   console.log('Received event:', JSON.stringify(event, null, 2));
+  console.log('Received event:', context);
+  
   server = server ?? (await bootstrap());
   return server(event, context, callback);
 };

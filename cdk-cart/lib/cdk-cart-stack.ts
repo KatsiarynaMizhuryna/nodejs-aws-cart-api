@@ -1,8 +1,14 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Function, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { RestApi, LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
+import { Cors, RestApi, LambdaIntegration } from "aws-cdk-lib/aws-apigateway";
 import 'dotenv/config';
+import {DataSource} from "typeorm";
+import "reflect-metadata";
+import { User } from '../../src/entities/users';
+import { Order } from '../../src/entities/orders';
+import { Cart } from '../../src/entities/carts';
+import { CartItem } from '../../src/entities/cart_items';
 
 export class CdkCartStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -32,5 +38,31 @@ export class CdkCartStack extends cdk.Stack {
     
     const proxyResource = restApi.root.addResource('{proxy+}');
     proxyResource.addMethod('ANY',new LambdaIntegration(NestJsLambda));
+    proxyResource.addCorsPreflight({
+     allowOrigins: Cors.ALL_ORIGINS,
+     allowHeaders: Cors.DEFAULT_HEADERS,
+     allowMethods: ['GET', 'PUT', 'OPTIONS'],
+   });
+    
+    const PostgresDataSource = new DataSource({
+      type: "postgres",
+      host: environment.RDS_HOST,
+      port: 5432,
+      username: environment.RDS_USERNAME,
+      password: environment.RDS_PASSWORD,
+      database: environment.RDS_DATABASE_NAME,
+      entities: [User, Order, Cart, CartItem ],
+      synchronize: true,
+      logging: true,
+      ssl: { rejectUnauthorized: false }
+    })
+    
+    PostgresDataSource.initialize()
+      .then(() => {
+        console.log("Data Source has been initialized!")
+      })
+      .catch((err) => {
+        console.error("Error during Data Source initialization", err)
+      })
   }
 }
