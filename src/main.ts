@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import serverlessExpress from '@vendia/serverless-express';
 import { Callback, Context, Handler } from 'aws-lambda';
+import 'dotenv/config';
 
 import helmet from 'helmet';
 
@@ -32,9 +33,11 @@ export const handler: Handler = async (
     context: Context,
     callback: Callback,
 ) => {
-  console.log('Received event:', JSON.stringify(event, null, 2));
-  console.log('Received event:', context);
   
+  console.log(process.env);
   server = server ?? (await bootstrap());
+  console.log(`server`, server);
+  console.log(`DONE`);
+  console.log(`Event: ${JSON.stringify(event)}`);
   return server(event, context, callback);
 };

@@ -3,17 +3,17 @@ import { User} from "./users";
 import { Cart} from "./carts";
 
 
-@Entity()
+@Entity("orders")
 export class Order {
     @PrimaryGeneratedColumn('uuid')
     id: string;
     
     @ManyToOne(() => User, (user) => user.id)
-    @JoinColumn({ name: 'user_id' })
+    @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
     user: User;
     
     @ManyToOne(() => Cart, (cart) => cart.id)
-    @JoinColumn({ name: 'cart_id' })
+    @JoinColumn({ name: 'cart_id', referencedColumnName: 'id' })
     cart: Cart;
     
     @Column('json', { nullable: true })

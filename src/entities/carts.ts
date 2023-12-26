@@ -9,13 +9,10 @@ import {
 } from "typeorm";
 import { CartItem} from "./cart_items";
 import {User} from "./users";
+import { CartStatuses} from "../cart";
 
-export enum CartStatus {
-    OPEN = 'OPEN',
-    ORDERED = 'ORDERED',
-}
 
-@Entity()
+@Entity('Cart')
 export class Cart {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -27,18 +24,18 @@ export class Cart {
     @JoinColumn({ name: 'user_id' })
     user: User;
     
-    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    created_at: Date;
+    @CreateDateColumn({ type: 'date', nullable: false })
+    created_at: string;
     
-    @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    updated_at: Date;
+    @UpdateDateColumn({ type: 'date', nullable: false })
+    updated_at: string;
     
     @Column({
         type: 'enum',
-        enum: CartStatus,
-        default: CartStatus.OPEN,
+        enum: CartStatuses,
+        default: CartStatuses.OPEN,
     })
-    status: CartStatus;
+    status: CartStatuses;
     
     @OneToMany(() => CartItem, (cartItem) => cartItem.cart)
     items: CartItem[]
