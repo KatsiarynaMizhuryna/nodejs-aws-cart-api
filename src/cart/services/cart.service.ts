@@ -110,7 +110,7 @@ export class CartService {
       throw new NotFoundException(`Cart not found for user with ID ${userId}`);
     }
     
-    await this.cartRepository.delete(existingCart);
+    await this.cartRepository.remove(existingCart);
   }
   
 }

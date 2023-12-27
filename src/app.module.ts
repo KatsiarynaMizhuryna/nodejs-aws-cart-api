@@ -24,7 +24,7 @@ import { User } from "./entities/users";
       username: process.env.RDS_USERNAME,
       password: process.env.RDS_PASSWORD,
       entities: [Product, CartItem, Cart, Order, User],
-      synchronize: true,
+      // synchronize: true,
       logging: true,
       ssl: {
         rejectUnauthorized: false

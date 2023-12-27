@@ -5,10 +5,9 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     OneToMany,
-    ManyToOne, JoinColumn
+    JoinColumn
 } from "typeorm";
 import { CartItem} from "./cart_items";
-import {User} from "./users";
 import { CartStatuses} from "../cart";
 
 
@@ -20,9 +19,9 @@ export class Cart {
     @Column('uuid', { nullable: false })
     user_id: string;
     
-    @ManyToOne(() => User, (user) => user.id)
-    @JoinColumn({ name: 'user_id' })
-    user: User;
+    // @ManyToOne(() => User, (user) => user.id)
+    // @JoinColumn({ name: 'user_id' })
+    // user: User;
     
     @CreateDateColumn({ type: 'date', nullable: false })
     created_at: string;
@@ -37,6 +36,7 @@ export class Cart {
     })
     status: CartStatuses;
     
-    @OneToMany(() => CartItem, (cartItem) => cartItem.cart)
+    @OneToMany(() => CartItem, (cartItem) => cartItem.cart.id)
+    @JoinColumn({ name: 'id', referencedColumnName: 'cart_id' })
     items: CartItem[]
 }

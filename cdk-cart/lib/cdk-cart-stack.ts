@@ -41,18 +41,11 @@ export class CdkCartStack extends cdk.Stack {
       defaultCorsPreflightOptions: {
         allowHeaders: ["*"],
         allowOrigins: ["*"],
-        allowMethods: [HttpMethods.GET, HttpMethods.PUT],
-      },
-    });
-    
-    const proxyResource = restApi.root.addResource("{proxy+}", {
-      defaultCorsPreflightOptions: {
-        allowHeaders: ["*"],
-        allowOrigins: ["*"],
         allowMethods: [HttpMethods.DELETE, HttpMethods.GET, HttpMethods.POST, HttpMethods.PUT],
       },
     });
     
+    const proxyResource = restApi.root.addResource("{proxy+}");
     proxyResource.addMethod('ANY',new LambdaIntegration(NestJsLambda));
     
     
