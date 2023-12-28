@@ -1,7 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Function, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import {Cors, LambdaIntegration, RestApi} from 'aws-cdk-lib/aws-apigateway';
 import 'dotenv/config';
 import "reflect-metadata";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -25,22 +25,23 @@ export class CdkCartStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(10),
       initialPolicy: [
         new PolicyStatement({
-          actions: ['rds-db:connect', 'rds-db:executeStatement'],
-          resources: ['*'],
-        }),
+                              actions: ['rds-db:connect', 'rds-db:executeStatement'],
+                              resources: ['*'],
+                            }),
       ],
     });
     
     const restApi = new RestApi(this, 'LambdaApi', {
       restApiName: 'NestJS REST API',
-      // defaultCorsPreflightOptions: {
-      //   allowHeaders: ['*'],
-      //   allowOrigins: Cors.ALL_ORIGINS,
-      //   allowMethods:Cors.ALL_METHODS
-      // },
+      defaultCorsPreflightOptions: {
+        allowHeaders: ['*'],
+        allowOrigins: Cors.ALL_ORIGINS,
+        allowMethods:Cors.ALL_METHODS
+      },
     });
     
     const proxyResource = restApi.root.addResource('{proxy+}');
     proxyResource.addMethod('ANY', new LambdaIntegration(NestJsLambda));
+    // proxyResource.addMethod('OPTIONS', new LambdaIntegration(NestJsLambda));
   }
 }
