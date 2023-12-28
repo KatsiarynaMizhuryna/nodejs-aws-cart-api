@@ -4,19 +4,7 @@ import { Product } from "./products";
 
 @Entity( 'cart_items')
 export class CartItem {
-    // @PrimaryGeneratedColumn('uuid')
-    // product_id: string;
-    //
-    // @Column({ type: 'uuid', nullable: false })
-    // cart_id: string;
-    //
-    // @ManyToOne(() => Cart)
-    // @JoinColumn({ name: 'cart_id', referencedColumnName: 'id' })
-    // cart: Cart;
-    //
-    // @Column()
-    // count: number;
-    
+   
     @PrimaryGeneratedColumn('uuid')
     id: string;
     
@@ -33,8 +21,6 @@ export class CartItem {
     
     @Column({ type: 'integer' })
     count: number;
-    
-    
     
     
 }

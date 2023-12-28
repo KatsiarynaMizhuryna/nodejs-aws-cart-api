@@ -84,7 +84,7 @@ export class CartController {
      comments: body.comment,
      items,
      total,
-   });
+   },);
     this.cartService.removeByUserId(userId);
     
     return {

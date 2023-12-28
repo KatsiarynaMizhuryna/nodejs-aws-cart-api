@@ -7,13 +7,13 @@ import helmet from 'helmet';
 
 import { AppModule } from './app.module';
 
-const port = process.env.PORT || 4000;
+// const port = process.env.PORT || 4000;
 
 let server: Handler;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+ console.log('==============================')
   app.enableCors({
     origin: (req, callback) => callback(null, true),
   });
@@ -35,9 +35,13 @@ export const handler: Handler = async (
 ) => {
   
   console.log(process.env);
+  
+  
   server = server ?? (await bootstrap());
+  
   console.log(`server`, server);
   console.log(`DONE`);
   console.log(`Event: ${JSON.stringify(event)}`);
+  console.log(`Event: ${event.body}`);
   return server(event, context, callback);
 };

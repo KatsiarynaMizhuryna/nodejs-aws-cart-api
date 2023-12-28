@@ -20,7 +20,7 @@ import { User } from "./entities/users";
       type: 'postgres',
       database: process.env.RDS_DATABASE_NAME,
       host: process.env.RDS_HOST,
-      port: +process.env.RDS_PORT,
+      port: 5432,
       username: process.env.RDS_USERNAME,
       password: process.env.RDS_PASSWORD,
       entities: [Product, CartItem, Cart, Order, User],
@@ -29,8 +29,9 @@ import { User } from "./entities/users";
       ssl: {
         rejectUnauthorized: false
       }
-                          
-                          }),
+      
+   }),
+    TypeOrmModule.forFeature([Product, CartItem, Cart, Order, User])
   ],
   controllers: [
     AppController,
