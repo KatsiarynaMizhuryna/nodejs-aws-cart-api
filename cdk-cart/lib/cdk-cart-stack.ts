@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Function, Code, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Function, Code, Runtime, HttpMethod } from 'aws-cdk-lib/aws-lambda';
 import {Cors, LambdaIntegration, RestApi} from 'aws-cdk-lib/aws-apigateway';
 import 'dotenv/config';
 import "reflect-metadata";
@@ -25,9 +25,9 @@ export class CdkCartStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(10),
       initialPolicy: [
         new PolicyStatement({
-                              actions: ['rds-db:connect', 'rds-db:executeStatement'],
-                              resources: ['*'],
-                            }),
+          actions: ['rds-db:connect', 'rds-db:executeStatement'],
+          resources: ['*'],
+        }),
       ],
     });
     
@@ -38,10 +38,12 @@ export class CdkCartStack extends cdk.Stack {
         allowOrigins: Cors.ALL_ORIGINS,
         allowMethods:Cors.ALL_METHODS
       },
+      defaultIntegration: new LambdaIntegration(NestJsLambda),
     });
     
     const proxyResource = restApi.root.addResource('{proxy+}');
     proxyResource.addMethod('ANY', new LambdaIntegration(NestJsLambda));
-    // proxyResource.addMethod('OPTIONS', new LambdaIntegration(NestJsLambda));
+    // proxyResource.addMethod('OPTIONS', new LambdaIntegration(NestJsLambda));NestJsLambda
+    
   }
 }
