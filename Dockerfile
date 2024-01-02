@@ -1,19 +1,24 @@
-FROM node:20-alpine AS build
+# Build stage
+FROM node:20-alpine AS base
 WORKDIR /app
-COPY --chown=node:node package*.json ./
+COPY package*.json ./
 RUN npm ci --production && npm install rimraf --save-dev && npm cache clean --force
-COPY --chown=node:node . .
-USER node
+WORKDIR /app
+COPY . .
 RUN npm run build
-
 
 # Production stage
 FROM node:20-alpine
-WORKDIR /app
-COPY --from=build /app/dist ./dist
-COPY package*.json ./
-RUN npm install --only=production && npm cache clean --force
+COPY --from=base /app/package*.json ./
+RUN npm install --only=production
+COPY --from=base /app/dist ./dist
 USER node
 ENV PORT=4000
+ENV RDS_HOST=cart-db.c9m62uuwu3yl.eu-west-1.rds.amazonaws.com
+ENV RDS_PORT=5432
+ENV RDS_DATABASE_NAME=postgres
+ENV RDS_USERNAME=postgres
+ENV RDS_PASSWORD=cjGGeQqo1LLBY7a0JGUa
+
 EXPOSE 4000
 CMD ["node", "dist/main.js"]
