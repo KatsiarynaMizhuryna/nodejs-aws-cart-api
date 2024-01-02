@@ -5,6 +5,7 @@ import {Cors, LambdaIntegration, RestApi} from 'aws-cdk-lib/aws-apigateway';
 import 'dotenv/config';
 import "reflect-metadata";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import {ApiKeySourceType} from "@aws-cdk/aws-apigateway";
 
 export class CdkCartStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -38,12 +39,18 @@ export class CdkCartStack extends cdk.Stack {
         allowOrigins: Cors.ALL_ORIGINS,
         allowMethods:Cors.ALL_METHODS
       },
-      defaultIntegration: new LambdaIntegration(NestJsLambda),
+      //defaultIntegration: new LambdaIntegration(NestJsLambda),
+      apiKeySourceType: ApiKeySourceType.HEADER,
     });
     
-    const proxyResource = restApi.root.addResource('{proxy+}');
-    proxyResource.addMethod('ANY', new LambdaIntegration(NestJsLambda));
+    // const proxyResource = restApi.root.addResource('{proxy+}');
+    // proxyResource.addMethod('ANY', new LambdaIntegration(NestJsLambda));
     // proxyResource.addMethod('OPTIONS', new LambdaIntegration(NestJsLambda));NestJsLambda
+    const lambdaIntegration = new LambdaIntegration(NestJsLambda);
+    
+    restApi.root.addProxy({
+      defaultIntegration: lambdaIntegration,
+    });
     
   }
 }

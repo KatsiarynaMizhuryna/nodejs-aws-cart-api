@@ -1,0 +1,14 @@
+.elasticbeanstalk/
+node_modules/
+dist/
+cdk/
+cdk.out/
+test/
+.eslitrc.js
+.gitignore
+.prettierc
+cdk.json
+jest.config.json
+package-lock.json
+postgresql_script/create_tables.sql
+README.md
