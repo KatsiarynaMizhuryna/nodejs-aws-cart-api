@@ -26,3 +26,5 @@ ENV RDS_PASSWORD=cjGGeQqo1LLBY7a0JGUa
 
 EXPOSE 4000
 CMD ["node", "dist/main.js"]
+
+
