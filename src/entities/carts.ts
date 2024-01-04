@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { CartItem} from "./cart_items";
 import { CartStatuses} from "../cart";
+import {Order} from "./orders";
 
 
 @Entity('Cart')
@@ -18,10 +19,6 @@ export class Cart {
     
     @Column('uuid', { nullable: false })
     user_id: string;
-    
-    // @ManyToOne(() => User, (user) => user.id)
-    // @JoinColumn({ name: 'user_id' })
-    // user: User;
     
     @CreateDateColumn({ type: 'date', nullable: false })
     created_at: string;
@@ -39,4 +36,8 @@ export class Cart {
     @OneToMany(() => CartItem, (cartItem) => cartItem.cart.id)
     @JoinColumn({ name: 'id', referencedColumnName: 'cart_id' })
     items: CartItem[]
+    
+    @OneToMany(() => Order, (item: Order) => item.cart_id)
+    @JoinColumn({ name: "id" })
+    orders: Order[];
 }
