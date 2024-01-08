@@ -10,6 +10,14 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
-  }
+    "incremental": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "src/**/*.ts",
+   ".eslintrc.js",
+    "cdk-cart-service/lib/cdk-cart-service-stack.ts",
+    "**/*.ts",
+    "**/*.js"
+  ]
 }
